@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Amor Eterno ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #d17a8a; /* Rosa mais vibrante */
+            --secondary-color: #fce7e8; /* Rosa muito claro */
+            --accent-color: #a05a67; /* Rosa mais escuro/vinho */
+            --text-color: #333;
+            --light-text-color: #666;
+            --background-color: #ffffff;
+            --light-background: #fffafa; /* Quase branco com toque rosa */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-background);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Efeitos de Animação */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes textFadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Animação para as SEÇÕES que não são a hero-phrases */
+        section:not(.hero-phrases) {
+            padding: 80px 20px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScale 1s ease-out forwards;
+            animation-delay: var(--delay-factor, 0s);
+        }
+
+        section:nth-of-type(odd) {
+            background-color: var(--light-background);
+        }
+
+        section:nth-of-type(even) {
+            background-color: var(--secondary-color);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            animation: slideInLeft 0.8s ease-out forwards;
+            animation-delay: calc(var(--delay-factor, 0s) + 0.2s);
+        }
+
+        h1 {
+            font-size: 4.5em;
+            color: var(--primary-color);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.15);
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 3em;
+            margin-bottom: 40px;
+            position: relative;
+            animation: slideInRight 0.8s ease-out forwards;
+            animation-delay: calc(var(--delay-factor, 0s) + 0.3s);
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        p {
+            font-size: 1.15em;
+            max-width: 850px;
+            margin: 0 auto 20px auto;
+            color: var(--light-text-color);
+        }
+
+        /* --- Hero Section - Frases Animadas --- */
+        .hero-phrases {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            background-image: url('imagens/op.jpg'); /* CERTIFIQUE-SE DE QUE ESTE NOME ESTÁ CORRETO! */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Opcional: faz a imagem de fundo ficar fixa ao rolar */
+        }
+
+        .hero-phrases::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+             z-index: 1; /* Garante que o overlay fique abaixo do texto, mas acima do fundo */
+        }
+
+        .phrase-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 900px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease-in-out;
+            z-index: 2; /* Garante que as frases fiquem acima do ::before */
+        }
+
+        .phrase-item.active {
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        .phrase-item h1 {
+            font-size: 5.5em;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+            line-height: 1.1;
+            animation: textFadeInUp 1.2s ease-out forwards;
+        }
+
+        .phrase-item p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em;
+            font-style: italic;
+            color: #fce7e8;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+            margin-top: 0;
+            margin-bottom: 30px;
+            animation: textFadeInUp 1.2s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .animated-heart {
+            font-size: 4.5em;
+            color: #ff69b4;
+            animation: heartBeat 1.5s infinite, textFadeInUp 1.2s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+
+        /* --- Gallery Section --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            /* Cursor padrão, não de ponteiro, para indicar que não é clicável */
+            cursor: default;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 20px;
+            opacity: 1; /* Sempre visível */
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5em;
+        }
+
+        /* REMOVIDO: Lightbox e suas classes não são mais necessárias se não há clique */
+        /*
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .close-btn:hover, .close-btn:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        */
+
+        /* --- Messages Section --- */
+        .messages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .message-card {
+            background-color: var(--background-color);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: left;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border-left: 8px solid var(--primary-color);
+        }
+
+        .message-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .message-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 2.2em;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .message-card p {
+            font-style: italic;
+            color: var(--light-text-color);
+            margin-bottom: 0;
+            font-size: 1.15em;
+            line-height: 1.8;
+        }
+
+        /* --- Counter Section --- */
+        .counter-box {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 50px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-top: 30px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .counter-box p {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .counter-box span {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5em;
+            font-weight: bold;
+            display: block;
+            line-height: 1;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* --- Brincadeira: Perguntas e Respostas --- */
+        .quiz-container {
+            background-color: var(--background-color);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .quiz-container h3 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        .question-box {
+            margin-bottom: 30px;
+        }
+        .question-box p {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+        .answer-input {
+            padding: 15px 25px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            font-size: 1.1em;
+            width: calc(100% - 100px);
+            max-width: 400px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px rgba(var(--primary-color), 0.3);
+        }
+        .quiz-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-left: 10px;
+        }
+        .quiz-button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        #quizFeedback {
+            margin-top: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #quizFeedback.correct {
+            color: #28a745;
+        }
+        #quizFeedback.incorrect {
+            color: #dc3545;
+        }
+
+        /* --- Surprise Section --- */
+        .surprise-box {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-top: 30px;
+        }
+
+        .surprise-box h2 {
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .surprise-input {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            margin-right: 15px;
+            font-size: 1.2em;
+            width: 300px;
+            max-width: 70%;
+            background-color: rgba(255,255,255,0.9);
+            color: var(--text-color);
+        }
+
+        .surprise-button {
+            background-color: var(--secondary-color);
+            color: var(--accent-color);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .surprise-button:hover {
+            background-color: #f0cdd0;
+            transform: translateY(-2px);
+        }
+
+        #secretMessage {
+            margin-top: 30px;
+            font-size: 1.3em;
+            font-style: italic;
+            color: white;
+            background-color: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #secretMessage.hidden {
+            display: none;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+
+        footer p {
+            margin: 0;
+            max-width: 100%;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5em;
+            }
+            .phrase-item h1 {
+                font-size: 4em;
+            }
+            h2 {
+                font-size: 2.5em;
+            }
+            p {
+                font-size: 1.05em;
+            }
+            .phrase-item p {
+                font-size: 2.2em;
+            }
+            .animated-heart {
+                font-size: 3.5em;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .counter-box span {
+                font-size: 4.5em;
+            }
+            .surprise-input, .surprise-button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            .message-card {
+                padding: 25px;
+            }
+            .message-card h3 {
+                font-size: 1.8em;
+            }
+            .quiz-container {
+                padding: 30px;
+            }
+            .answer-input {
+                width: calc(100% - 120px);
+            }
+            .quiz-button {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.8em;
+            }
+            .phrase-item h1 {
+                font-size: 3em;
+            }
+            h2 {
+                font-size: 2em;
+            }
+            .phrase-item p {
+                font-size: 1.8em;
+            }
+            .counter-box span {
+                font-size: 3.5em;
+            }
+            .surprise-box {
+                padding: 40px 20px;
+            }
+            .animated-heart {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero-phrases">
+        <div class="phrase-item active" id="phrase1">
+            <h1>Meu Amor, Minha Vida!</h1>
+            <p>Com você, cada dia é um novo capítulo da nossa linda história.</p>
+            <span class="animated-heart">❤️</span>
+        </div>
+        <div class="phrase-item" id="phrase2">
+            <h1>Você é Meu Sol</h1>
+            <p>Seu brilho ilumina meus dias e me faz amar mais a vida.</p>
+            <span class="animated-heart">☀️</span>
+        </div>
+        <div class="phrase-item" id="phrase3">
+            <h1>Nossa Conexão</h1>
+            <p>Nossas almas se reconheceram e se escolheram para sempre.</p>
+            <span class="animated-heart">🔗</span>
+        </div>
+        <div class="phrase-item" id="phrase4">
+            <h1>Para Sempre Seu</h1>
+            <p>Prometo amar você em cada passo, em cada sorriso, em cada respirar.</p>
+            <span class="animated-heart">💕</span>
+        </div>
+    </section>
+
+    <section id="galeria" style="--delay-factor: 0.5s;">
+        <h2>Nossos Momentos Inesquecíveis</h2>
+        <p>Uma pequena coleção de sorrisos, abraços e aventuras que compartilhamos.</p>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="imagens/img1.jpg" alt="Nosso Primeiro Encontro">
+                <div class="gallery-item-overlay">Dia do cherrinho</div>
+            </div>
+            <div class="gallery-item">
+                <img src="imagens/img4.jpg" alt="Viagem Inesquecível">
+                <div class="gallery-item-overlay">Viagem Inesquecível</div>
+            </div>
+            <div class="gallery-item">
+                <img src="imagens/img3.jpg" alt="Dia de Risadas">
+                <div class="gallery-item-overlay">Dia de Risadas</div>
+            </div>
+            <div class="gallery-item">
+                <img src="imagens/img5.jpg" alt="Juntos Sempre">
+                <div class="gallery-item-overlay">Juntos Sempre</div>
+            </div>
+            <div class="gallery-item">
+                <img src="imagens/img6.jpg" alt="Nosso Cantinho">
+                <div class="gallery-item-overlay">Teu uvuevuenvuevue</div>
+            </div>
+            <div class="gallery-item">
+                <img src="imagens/op.jpg" alt="Amor Verdadeiro">
+                <div class="gallery-item-overlay">Amor Verdadeiro</div>
+            </div>
+        </div>
+        </section>
+
+    <section style="--delay-factor: 1s;">
+        <h2>Mensagens do Coração</h2>
+        <p>Palavras que expressam o que sinto por você, meu amor. Cada uma escrita com a verdade da alma.</p>
+        <div class="messages-container">
+            <div class="message-card">
+                <h3>Minha Linda</h3>
+                <p>"Desde que você entrou na minha vida, tudo se tornou mais colorido e cheio de sentido. Você é a mulher dos meus sonhos, e sou eternamente grato por cada momento ao seu lado. Seu sorriso é a melodia da minha alma."</p>
+            </div>
+            <div class="message-card">
+                <h3>Nosso Futuro</h3>
+                <p>"Mal posso esperar para viver cada um dos nossos próximos capítulos. Construir uma vida com você é a minha maior alegria e meu maior desejo. Que a cada amanhecer, nosso amor se renove e floresça ainda mais. Te amo infinitamente!"</p>
+            </div>
+            <div class="message-card">
+                <h3>Para Sempre</h3>
+                <p>"Seu brilho ilumina meus dias, seu abraço me conforta e seu amor me completa de uma forma que jamais imaginei. Que nosso caminho seja sempre de cumplicidade, carinho, respeito e muita felicidade. Para sempre meu amor, meu tudo!"</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="--delay-factor: 1.5s;">
+        <h2>Nossa Jornada de Amor</h2>
+        <div class="counter-box">
+            <p>Estamos juntos há</p>
+            <span id="daysTogether">0</span>
+            <p>dias mágicos!</p>
+        </div>
+    </section>
+
+    <section style="--delay-factor: 2s;">
+        <h2>Teste Nosso Conhecimento!</h2>
+        <p>Vamos ver o quanto você sabe sobre a nossa história!</p>
+        <div class="quiz-container">
+            <div id="quizQuestion" class="question-box">
+                <p>Clique em "Iniciar Quiz" para começar!</p>
+            </div>
+            <input type="text" id="quizAnswer" class="answer-input" placeholder="Sua resposta...">
+            <button onclick="checkAnswer()" class="quiz-button">Verificar</button>
+            <p id="quizFeedback"></p>
+            <button onclick="nextQuestion()" class="quiz-button" style="margin-top: 15px; display: none;" id="nextQuizBtn">Próxima Pergunta</button>
+            <button onclick="loadQuestion()" class="quiz-button" style="margin-top: 15px;" id="startQuizBtn">Iniciar Quiz</button>
+        </div>
+    </section>
+
+    <section style="--delay-factor: 2.5s;">
+        <h2>Uma Surpresa Exclusiva para Você!</h2>
+        <p>Para esta surpresa, digite o meu nome no Snooker.</p>
+        <div class="surprise-box">
+            <input type="password" id="secretInput" class="surprise-input" placeholder="Nossa palavra secreta...">
+            <button onclick="revealSecret()" class="surprise-button">Revelar!</button>
+            <p id="secretMessage" class="hidden">
+                Parabéns, meu amor! Você é a pessoa mais incrível que já conheci, a estrela que guia meus passos e a razão dos meus mais sinceros sorrisos. Este site é apenas um pequeno pedaço do meu coração, feito com todo o amor e dedicação que você merece.
+                Cada dia ao seu lado é uma aventura, um aprendizado e a confirmação de que o amor verdadeiro existe. Obrigado por ser você, por me completar e por tornar minha vida infinitamente melhor.
+                Você é o meu tudo, hoje e para sempre! Te amo mais que as palavras podem expressar! ❤️
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Nosso Amor. Feito com ❤️ e a mais pura paixão para a mulher da minha vida. ass: Marridos ivanerio uvuevuenvuevue</p>
+    </footer>
+
+    <script>
+        // --- Frases Animadas na Tela Inicial ---
+        const phraseItems = document.querySelectorAll('.phrase-item');
+        let currentPhraseIndex = 0;
+        const phraseDisplayDuration = 6000; // Tempo que cada frase fica na tela (6 segundos)
+
+        function showPhrase(index) {
+            phraseItems.forEach((item, i) => {
+                item.classList.remove('active');
+                if (i === index) {
+                    item.classList.add('active');
+                    // Reinicia a animação de texto para a frase atual
+                    item.querySelectorAll('h1, p, .animated-heart').forEach(el => {
+                        el.style.animation = 'none';
+                        void el.offsetWidth;
+                        if (el.tagName === 'H1') el.style.animation = 'textFadeInUp 1.2s ease-out forwards';
+                        else if (el.tagName === 'P') el.style.animation = 'textFadeInUp 1.2s ease-out forwards 0.3s';
+                        else if (el.classList.contains('animated-heart')) el.style.animation = 'textFadeInUp 1.2s ease-out forwards 0.6s, heartBeat 1.5s infinite';
+                    });
+                }
+            });
+        }
+
+        function nextPhrase() {
+            currentPhraseIndex = (currentPhraseIndex + 1) % phraseItems.length;
+            showPhrase(currentPhraseIndex);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            showPhrase(currentPhraseIndex);
+            setInterval(nextPhrase, phraseDisplayDuration);
+        });
+
+        // --- Contador de Dias ---
+        // Altere esta data para o DIA em que vocês começaram a namorar (Ano, Mês-1, Dia)
+        const startDate = new Date(2025, 2, 10);
+
+        function updateDaysTogether() {
+            const now = new Date();
+            const diffTime = Math.abs(now - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('daysTogether').textContent = diffDays;
+        }
+
+        updateDaysTogether();
+        setInterval(updateDaysTogether, 1000 * 60 * 60 * 24);
+
+        // --- Mensagem Secreta ---
+        // Altere esta senha para a sua palavra secreta!
+        const secretPassword = "balazio junior";
+        const secretMessageDiv = document.getElementById('secretMessage');
+        const originalSecretMessage = secretMessageDiv.innerHTML;
+
+        function revealSecret() {
+            const input = document.getElementById('secretInput').value.toLowerCase().trim();
+            if (input === secretPassword) {
+                secretMessageDiv.classList.remove('hidden');
+                document.getElementById('secretInput').value = '';
+            } else {
+                secretMessageDiv.classList.add('hidden');
+                alert('Ops! Palavra secreta incorreta. Tente novamente!');
+                document.getElementById('secretInput').value = '';
+            }
+        }
+
+        // --- Quiz sobre o Relacionamento ---
+        // Personalize as perguntas e as respostas aqui!
+        const quizQuestions = [
+            { question: "Qual foi o local do nosso primeiro encontro(comemos)?", answer: "angry lion" },
+            { question: "Qual palavra uso para dar bom dia?", answer: "bom dius" },
+            { question: "Qual o nome que o bruno chama no meu carro", answer: "doblo" },
+            { question: "ME AMAS QUANTO?", answer: "dois mil dolares" },
+            { question: "Qual o apelido carinhoso que mais me chamas?", answer: "marridos" }
+        ];
+        let currentQuestionIndex = 0;
+        const quizQuestionElement = document.getElementById('quizQuestion');
+        const quizAnswerInput = document.getElementById('quizAnswer');
+        const quizFeedbackElement = document.getElementById('quizFeedback');
+        const nextQuizBtn = document.getElementById('nextQuizBtn');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+
+        function loadQuestion() {
+            if (currentQuestionIndex < quizQuestions.length) {
+                quizQuestionElement.innerHTML = `<p>${quizQuestions[currentQuestionIndex].question}</p>`;
+                quizAnswerInput.value = '';
+                quizFeedbackElement.textContent = '';
+                quizFeedbackElement.classList.remove('correct', 'incorrect');
+                nextQuizBtn.style.display = 'none';
+                startQuizBtn.style.display = 'none';
+                quizAnswerInput.style.display = 'inline-block';
+                document.querySelector('.quiz-button').style.display = 'inline-block';
+                quizAnswerInput.focus();
+            } else {
+                quizQuestionElement.innerHTML = `<p>Parabéns! Você respondeu a todas as perguntas! Mereço o cooooool🎉</p>`;
+                quizAnswerInput.style.display = 'none';
+                document.querySelector('.quiz-button').style.display = 'none';
+                nextQuizBtn.style.display = 'none';
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = quizAnswerInput.value.toLowerCase().trim();
+            const correctAnswer = quizQuestions[currentQuestionIndex].answer.toLowerCase().trim();
+
+            if (userAnswer === correctAnswer) {
+                quizFeedbackElement.textContent = 'Acertou! Parabéns, meu amor! ❤️';
+                quizFeedbackElement.classList.remove('incorrect');
+                quizFeedbackElement.classList.add('correct');
+                nextQuizBtn.style.display = 'inline-block';
+            } else {
+                quizFeedbackElement.textContent = 'resposta incorreta. Tente novamente! marridas';
+                quizFeedbackElement.classList.remove('correct');
+                quizFeedbackElement.classList.add('incorrect');
+                nextQuizBtn.style.display = 'none';
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        startQuizBtn.addEventListener('click', loadQuestion);
+
+        // --- Animação de entrada das seções (excluindo a Hero Phrases agora) ---
+        // Esta função garante que as seções apareçam suavemente depois da tela inicial.
+        document.addEventListener("DOMContentLoaded", function() {
+            const sections = document.querySelectorAll('section:not(.hero-phrases)');
+            sections.forEach((section, index) => {
+                section.style.setProperty('--delay-factor', `${(index + 1) * 0.25}s`);
+            });
+        });
+
+        // O JavaScript para o lightbox (openLightbox, closeLightbox) foi removido
+        // pois os cards não são mais clicáveis.
+    </script>
+</body>
+</html>
